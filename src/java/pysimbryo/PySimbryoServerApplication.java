@@ -1,8 +1,8 @@
+package pysimbryo;
+
 import py4j.GatewayServer;
 
-
-
-public class AdditionApplication
+public class PySimbryoServerApplication
 {
 
   public int addition(int first, int second)
@@ -12,9 +12,11 @@ public class AdditionApplication
 
   public static void main(String[] args)
   {
-    AdditionApplication app = new AdditionApplication();
+    System.out.println("PySimbryo");
+    PySimbryoServerApplication app = new PySimbryoServerApplication();
     // app is now the gateway.entry_point
     GatewayServer server = new GatewayServer(app);
+    System.out.println("Server starting ...");
     server.start();
   }
 }
