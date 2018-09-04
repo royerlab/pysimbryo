@@ -37,7 +37,7 @@ public class PySimbryoServerApplication
     // Remove this line to prevent constant rendering:
     lApplication.startRenderLoop();
 
-    GatewayServer server = new GatewayServer(lApplication);
+    GatewayServer server = new GatewayServer(lApplication, 25335);
     System.out.println("Server starting ...");
     server.start();
   }
@@ -156,6 +156,11 @@ public class PySimbryoServerApplication
       // lSimulator.simulationSteps(100, 1);
       mSimulator.render(true);
     }
+  }
+
+  public LightSheetMicroscopeSimulatorDrosophila getSimulator()
+  {
+    return mSimulator;
   }
 
   public int addition(int first, int second)
