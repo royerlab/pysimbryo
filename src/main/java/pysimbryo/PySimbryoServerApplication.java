@@ -114,8 +114,14 @@ public class PySimbryoServerApplication
 
   public void example()
   {
-    // This is how you access a lightsheet parameters:
+    // This is how you access a lightsheet position:
     mSimulator.getLightSheet(0).setLightSheetPosition(0, 0, 0);
+
+    // This is how you set the alpha angle:
+    mSimulator.getLightSheet(0).setAlphaInRadians(0);
+
+    // This is how you set the beta angle:
+    mSimulator.getLightSheet(0).setBetaInRadians(0);
 
     // This is how to access a detection arm parameters:
     mSimulator.getDetectionOptics(0).setZFocusPosition(0);
@@ -128,6 +134,9 @@ public class PySimbryoServerApplication
 
     // This is how you get a float array for the image:
     float[] lArray = convertImageToFloatArray(lCameraImage);
+
+    // This is how you get the width and similarly the height:
+    lCameraImage.getWidth();
 
     // Testing:
     System.out.println("size of array:" + lArray.length);
