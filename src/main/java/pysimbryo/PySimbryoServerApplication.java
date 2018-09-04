@@ -24,18 +24,22 @@ public class PySimbryoServerApplication
   public static void main(String[] args)
   {
     System.out.println("PySimbryo");
-    PySimbryoServerApplication lApplication =
-                                            new PySimbryoServerApplication(args);
+    PySimbryoServerApplication
+        lApplication =
+        new PySimbryoServerApplication(args);
     // app is now the gateway.entry_point
 
-    lApplication.openCamerasViewers();
-    lApplication.openControls();
+
+    if (args[0].contains("viewers"))
+      lApplication.openCamerasViewers();
+    if (args[0].contains("controls"))
+      lApplication.openControls();
 
     // Remove this line, this is meant for testing:
-    lApplication.example();
+    //lApplication.example();
 
     // Remove this line to prevent constant rendering:
-    lApplication.startRenderLoop();
+    //lApplication.startRenderLoop();
 
     GatewayServer server = new GatewayServer(lApplication, 25335);
     System.out.println("Server starting ...");
@@ -69,22 +73,23 @@ public class PySimbryoServerApplication
     System.out.println("OpenCL devices found: "
                        + mClearCL.getAllDevices());
 
-    ClearCLDevice lFastestGPUDevice =
-                                    mClearCL.getFastestGPUDeviceForImages();
+    ClearCLDevice
+        lFastestGPUDevice =
+        mClearCL.getFastestGPUDeviceForImages();
 
     System.out.println("OpenCL device chosen: " + lFastestGPUDevice);
 
     ClearCLContext lContext = lFastestGPUDevice.createContext();
 
     mSimulator =
-               new LightSheetMicroscopeSimulatorDrosophila(lContext,
-                                                           mNumberOfDetectionArms,
-                                                           mNumberOfIlluminationArms,
-                                                           lMaxCameraResolution,
-                                                           lInitialDivisionTimePoint,
-                                                           lPhantomWidth,
-                                                           lPhantomHeight,
-                                                           lPhantomDepth);
+        new LightSheetMicroscopeSimulatorDrosophila(lContext,
+                                                    mNumberOfDetectionArms,
+                                                    mNumberOfIlluminationArms,
+                                                    lMaxCameraResolution,
+                                                    lInitialDivisionTimePoint,
+                                                    lPhantomWidth,
+                                                    lPhantomHeight,
+                                                    lPhantomDepth);
 
   }
 
@@ -145,11 +150,13 @@ public class PySimbryoServerApplication
 
   public static float[] convertImageToFloatArray(ClearCLImage pImage)
   {
-    int lNumberOfFloats = (int) (pImage.getSizeInBytes()
-                                 / Size.of(Float.class));
+    int
+        lNumberOfFloats =
+        (int) (pImage.getSizeInBytes() / Size.of(Float.class));
 
-    final OffHeapMemory lBuffer =
-                                OffHeapMemory.allocateFloats(lNumberOfFloats);
+    final OffHeapMemory
+        lBuffer =
+        OffHeapMemory.allocateFloats(lNumberOfFloats);
     pImage.writeTo(lBuffer, true);
 
     float[] lFloatArray = new float[lNumberOfFloats];
