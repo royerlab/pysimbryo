@@ -21,6 +21,9 @@ public class PySimbryoServerApplication
   public int mNumberOfIlluminationArms;
   public ClearCLImageViewer mCameraImageViewer;
 
+  public static volatile boolean mKeepRunning = true;
+
+
   public static void main(String[] args)
   {
     System.out.println("PySimbryo");
@@ -43,7 +46,24 @@ public class PySimbryoServerApplication
 
     GatewayServer server = new GatewayServer(lApplication, 25335);
     System.out.println("Server starting ...");
+
+
     server.start();
+
+    while(mKeepRunning)
+    {
+      try
+      {
+        Thread.sleep(500);
+      }
+      catch (InterruptedException e)
+      {
+        e.printStackTrace();
+      }
+    }
+
+    server.shutdown();
+
   }
 
   public PySimbryoServerApplication(String[] args)
@@ -177,6 +197,11 @@ public class PySimbryoServerApplication
   public LightSheetMicroscopeSimulatorDrosophila getSimulator()
   {
     return mSimulator;
+  }
+
+  public void shutdown()
+  {
+    mKeepRunning=false;
   }
 
   public int addition(int first, int second)
