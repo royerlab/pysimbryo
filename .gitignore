@@ -17,7 +17,3 @@ pysimbryo.iml
 pysimbryo.ipr
 pysimbryo.iws
 out
-gradle/bintrayUpload.gradle
-gradle/installGitHooks
-gradle/spotless.gradle
-codeformat.eclipse.xml
