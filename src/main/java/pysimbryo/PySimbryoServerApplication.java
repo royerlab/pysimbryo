@@ -12,6 +12,8 @@ import coremem.util.Size;
 import py4j.GatewayServer;
 import simbryo.synthoscopy.microscope.lightsheet.drosophila.LightSheetMicroscopeSimulatorDrosophila;
 
+import java.util.Arrays;
+
 public class PySimbryoServerApplication
 {
   public ClearCLBackendInterface mClearCLBackend;
@@ -33,9 +35,9 @@ public class PySimbryoServerApplication
     // app is now the gateway.entry_point
 
 
-    if (args[0].contains("viewers"))
+    if (args.length>0 && args[0].contains("viewers"))
       lApplication.openCamerasViewers();
-    if (args[0].contains("controls"))
+    if (args.length>0 && args[0].contains("controls"))
       lApplication.openControls();
 
     // Remove this line, this is meant for testing:
@@ -47,6 +49,7 @@ public class PySimbryoServerApplication
     GatewayServer server = new GatewayServer(lApplication, 25335);
     System.out.println("Server starting ...");
 
+    //lApplication.example();
 
     server.start();
 
@@ -158,7 +161,7 @@ public class PySimbryoServerApplication
     final ClearCLImage lCameraImage = mSimulator.getCameraImage(0);
 
     // This is how you get a float array for the image:
-    float[] lArray = convertImageToFloatArray(lCameraImage);
+    char[] lArray = convertImageToCharArray(lCameraImage);
 
     // This is how you get the width and similarly the height:
     lCameraImage.getWidth();
@@ -166,23 +169,34 @@ public class PySimbryoServerApplication
     // Testing:
     System.out.println("size of array:" + lArray.length);
 
+    long sum = 0;
+    for(int i=0; i<lArray.length; i++)
+      sum+= lArray[i];
+
+    System.out.println("Sum="+sum);
+
+
   }
 
-  public static float[] convertImageToFloatArray(ClearCLImage pImage)
+  /*
+   * Note: in Java parlance, chars are 16bit unsigned ints, and shorts are 16bit signed ints.
+   */
+  public static char[] convertImageToCharArray(ClearCLImage pImage)
   {
+
     int
-        lNumberOfFloats =
-        (int) (pImage.getSizeInBytes() / Size.of(Float.class));
+        lNumberOfUnsignedInts =
+        (int) (pImage.getSizeInBytes() / Size.of(Short.class));
 
     final OffHeapMemory
         lBuffer =
-        OffHeapMemory.allocateFloats(lNumberOfFloats);
+        OffHeapMemory.allocateChars(lNumberOfUnsignedInts);
     pImage.writeTo(lBuffer, true);
 
-    float[] lFloatArray = new float[lNumberOfFloats];
-    lBuffer.copyTo(lFloatArray);
+    char[] lCharArray = new char[lNumberOfUnsignedInts];
+    lBuffer.copyTo(lCharArray);
 
-    return lFloatArray;
+    return lCharArray;
   }
 
   public void startRenderLoop()
