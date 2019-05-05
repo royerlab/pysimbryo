@@ -98,7 +98,7 @@ public class PySimbryoServerApplication
 
     ClearCLDevice
         lFastestGPUDevice =
-        mClearCL.getFastestGPUDeviceForImages();
+        mClearCL.getDeviceByName("HD");
 
     System.out.println("OpenCL device chosen: " + lFastestGPUDevice);
 
@@ -113,6 +113,10 @@ public class PySimbryoServerApplication
                                                     lPhantomWidth,
                                                     lPhantomHeight,
                                                     lPhantomDepth);
+
+    openCamerasViewers();
+    openControls();
+    startRenderLoop();
 
   }
 
